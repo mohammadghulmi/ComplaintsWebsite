@@ -19,31 +19,29 @@ import TextField from '@material-ui/core/TextField';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
- var ticketname="";
+  //define variables used in project
+  var ticketname="";
   var selected="";
   var RecentMessage="";
   var messages=["","",""];
-var initialState = {
-  id: 0,
-  title:"New Task",
-  asignee:"mohammad",
-  status:"new",
-  Goal:"",
-  proceed:true,
-  text_Length:25,
-  conversation:true,
-  Message:RecentMessage,
-  problems: [
-    {
-      Message: "" // string
-      
-    }
-  ]
-};
+  //set intial state of project
+  var initialState = {
+    id: 0,
+    title:"New Task",
+    asignee:"mohammad",
+    status:"new",
+    Goal:"",
+    proceed:true,
+    text_Length:25,
+    conversation:true,
+    Message:RecentMessage,
+    
+  };
 
-
+//defune the reducer that will manage the project state
 function reducer(state = initialState,action){
   switch(action.type){
+    //define the state at the start of application
     case ADD_Ticket: {
       return{
         ...state,
@@ -55,6 +53,7 @@ function reducer(state = initialState,action){
         
       }
     }
+    //checks if the text inputed is valid and under 25 letters to enable the proceed button
     case Enable_pro:{
       var x = ticketname.length;
         
@@ -77,17 +76,20 @@ function reducer(state = initialState,action){
         
         
     }
+    // just setting the intial state
     case intial:{
       return{
         ...state
       }
     }
+    //define that the type of the complaint has been set
     case goal_dis:{
       return{
         ...state,
         Goal: selected
       }
     }
+    //set that the message has been sent
     case send_message:{
       return{
         ...state,
@@ -99,6 +101,7 @@ function reducer(state = initialState,action){
 
   }
 }
+//dispatchers for the reducer
 const ADDTicket = () =>{
   return{ 
     type : ADD_Ticket
@@ -138,13 +141,11 @@ class App extends Component {
   
   constructor(props) {
     super(props);
-    this.setState({
-      sent:messages
-    });
+    
     
     
   }
-  
+  //intial state of the component
   state={
     title: "Complaint title",
     text_length:25,
@@ -156,6 +157,7 @@ class App extends Component {
     info:""
 
   }
+  //delta manages the changes in the text input and dispatches events when changed
   delta = (event) => {
     ticketname = event.target.value
     Store.dispatch(EnablePro());
@@ -167,6 +169,7 @@ class App extends Component {
         
     });
   }
+  //handles the procees button
   handleButton = (event) => {
     var goal = Store.getState().Goal;
     if(goal=!""){
@@ -180,11 +183,12 @@ class App extends Component {
     }
 
   }
+  //handles list select
   handleList = (event) => {
     selected = event.target.value;
     Store.dispatch(Goaldis());
   }
-  
+  //sends the message when the user presses enter
   _handleKeyDown= (event) =>{
     if (event.key === 'Enter') {
       RecentMessage= event.target.value;
@@ -200,6 +204,7 @@ class App extends Component {
     }
 
   }
+  //sets the intial state 
   componentDidMount() {
     Store.dispatch(Intial());
     var x = select(Store.getState());
@@ -215,6 +220,7 @@ class App extends Component {
       }
       );
     }
+    //the design of the page
   return (
   <Provider store={Store}> 
   <div className="full">
@@ -222,6 +228,7 @@ class App extends Component {
       <div className="taskbar">
         <text></text>
       </div>
+      
       <div className="classify">
         <div className= "padd"></div>
         <header className="header">Complaint</header>
@@ -278,7 +285,7 @@ class App extends Component {
   }
   
 }
-
+//gets the text length fron the redux state
 const mapStateToProps = state => {
   return {
     text_Length: state.text_Length
@@ -286,6 +293,7 @@ const mapStateToProps = state => {
 };
  connect(mapStateToProps)(App);
 export default App;
+//returns the text length
 function select(state) {
   return state.text_Length;
 }
